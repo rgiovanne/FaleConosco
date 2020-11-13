@@ -1,0 +1,21 @@
+h1 {
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 2%;
+}
+
+.required:after {
+    color: #e32;
+    content: ' *';
+    display:inline;
+}
+
+.buttoncadastro{
+    background-color: #FF8C00 !important;
+    color: #FFFFFF !important	
+}
+
+.btnAdicionaComentario{
+    margin: 10px !important;
+}

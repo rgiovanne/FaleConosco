@@ -1,0 +1,901 @@
+<html>
+
+<head>
+
+	<link type="text/css" rel="stylesheet" href="/style-guide/css/fluig-style-guide.min.css" />
+	<script type="text/javascript" src="/portal/resources/js/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
+	<!-- <script type="text/javascript" src="js/jquery.tablesorter.min.js"></script> -->
+	<script type="text/javascript" src="/portal/resources/js/mustache/mustache-min.js"></script>
+	<script type="text/javascript" src="/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/webdesk/vcXMLRPC.js"></script>
+	<script type="text/javascript" src="custom.js" charset="utf-8"></script>
+	<script type="text/javascript" src="localizaPaciente.js" charset="utf-8"></script>
+	<script type="text/javascript" src="gravarPaciente.js" charset="utf-8"></script>
+	<script type="text/javascript" src="localizaMedico.js" charset="utf-8"></script>
+	<script type="text/javascript" src="gravarMedico.js" charset="utf-8"></script>
+	<script type="text/javascript" src="beforeSendValidate.js" charset="utf-8"></script>
+	<link type="text/css" rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+	<div class="fluig-style-guide">
+		<form name="form" role="form">
+
+			<div id="faleConoscoT" style="display: none">
+				<h1>Fale Conosco</h2>
+			</div>
+
+			<div id="conciergeT" style="display: none">
+				<h1>Concierge</h2>
+			</div>
+
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-2 col-lg-2  col-md-offset-10 col-lg-offset-10">
+						<div class="form-group">
+							<label for="numSolicitacao">Número da Solicitação</label>
+							<input class="form-control" type="text" name="numSolicitacao" id=numSolicitacao
+								readonly="readonly">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+
+				<div class="panel-heading">
+					<h2 class="panel-title">
+						<span class="fluigicon fluigicon-file-user fluigicon-lg"></span>&nbsp;Dados do Atendimento
+					</h2>
+				</div>
+
+				<div class="panel-body container-fluid">
+
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label class="required" for="">Data Atendimento</label>
+								<div class="input-group date" id="MY_SELECTOR1">
+									<input type="text" class="form-control" name="dataAtendimento" id="dataAtendimento"
+										placeholder="Data Atendimento">
+									<span class="input-group-addon">
+										<span class="fluigicon fluigicon-calendar"></span>
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div class="form-group">
+								<label class="required" for="">Tipo Atendimento</label>
+								<select class="form-control" name="tipoAtendimento" id="tipoAtendimento">
+									<option value="">Selecione...</option>
+									<option value="1">Fale Conosco</option>
+									<option value="2">Concierge Médico</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div class="form-group">
+								<label class="required" for="">Marca</label>
+
+								<input type="zoom" id="Marca" name="Marca" data-zoom="{
+										'displayKey':'ZI_DESCRI',
+										'datasetId':'ds_marcas_alliar',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha a Marca',
+										'fields':[
+											{
+											'field':'ZI_CODIGO',
+											'label':'Codigo'
+											},
+											{
+											'field':'ZI_DESCRI',
+											'label':'Descrição'
+											}
+										]
+									}" />
+								<input type="hidden" name="codMarca" id="codMarca">
+								<input type="hidden" name="codDominio" id="codDominio">
+
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label class="required" for="">Unidade</label>
+								<input type="zoom" id="Unidade" name="Unidade" data-zoom="{
+										'displayKey':'M0_CODFIL',
+										'datasetId':'ds_Unidade',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha a Marca',
+										'fields':[
+											{
+											'field':'M0_CODFIL',
+											'label':'C&#243;digo da Filial'
+											},
+											{
+											'field':'M0_FILIAL',
+											'label':'Nome da Filial'
+											}
+										]
+									}" />
+
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="">Descrição Unidade</label>
+								<input type="text" class="form-control" name="M0_FILIAL" id="M0_FILIAL"
+									readonly="readonly">
+							</div>
+						</div>
+					</div>
+
+					<div class="row" id="faleConosco" style="display: none">
+
+						<div class="col-md-4">
+							<div class="form-group campozoom">
+								<label class="required" for="">Nome do Paciente</label>
+								<input type="zoom" id="NomePaciente" name="NomePaciente" data-zoom="{
+										'displayKey':'NOME',
+										'datasetId':'ds_FaleConoscoPleres',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha o Paciente',
+										'fields':[
+											{
+											'field':'NOME',
+											'label':'Nome',
+											'standard':'true'
+											},
+											{
+											'field':'CPF',
+											'label':'CPF'
+											}
+										]
+									}" />
+
+							</div>
+
+							<div class="form-group campocadastro">
+								<label class="required" for="">Nome do Paciente</label>
+								<input type="text" class="form-control" name="NomePaciente1" id="NomePaciente1"
+									maxlength="40" />
+							</div>
+
+							<div class="form-group campobusca">
+								<label class="required" for="">Nome do Paciente</label>
+								<input type="zoom" id="NomePaciente2" name="NomePaciente2" data-zoom="{
+										'displayKey':'nomePaciente',
+										'datasetId':'ds_CadastroPaciente_FC',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha o Paciente',
+										'fields':[
+											{
+											'field':'nomePaciente',
+											'label':'Nome',
+											'standard':'true'
+											},
+											{
+											'field':'cpfPaciente',
+											'label':'CPF'
+											}
+										]
+									}" />
+							</div>
+
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group campozoom">
+								<label class="required" for="cpf">CPF</label>
+								<input type="zoom" id="cpf" name="cpf" data-zoom="{
+										'displayKey':'CPF',
+										'datasetId':'ds_FaleConoscoPleres',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha o Paciente',
+										'fields':[
+											{
+											'field':'CPF',
+											'label':'cpf'
+											},
+											{
+											'field':'NOME',
+											'label':'Nome'
+											}
+										]
+									}" />
+
+							</div>
+
+							<div class="form-group campocadastro">
+								<label class="required" for="">CPF</label>
+								<input type="text" class="form-control" name="cpf1" id="cpf1" maxlength="40" />
+							</div>
+
+							<div class="form-group campobusca">
+								<label class="required" for="">CPF</label>
+								<input type="zoom" id="cpf2" name="cpf2" data-zoom="{
+										'displayKey':'cpfPaciente',
+										'datasetId':'ds_CadastroPaciente_FC',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha o Paciente',
+										'fields':[
+											{
+											'field':'cpfPaciente',
+											'label':'cpf'
+											},
+											{
+											'field':'nomePaciente',
+											'label':'Nome',
+											'standard':'true'
+											},
+											{
+											'field':'emailPaciente',	
+											'label':'Email',
+											'visible':'false'
+											},
+											{
+											'field':'celularPaciente',	
+											'label':'Celular',
+											'visible':'false'
+											},
+											{
+											'field':'telPaciente',	
+											'label':'Telefone',
+											'visible':'false'
+											},
+											{
+											'field':'nomeTitular',	
+											'label':'Nome Titular',
+											'visible':'false'
+											},
+											{
+											'field':'cpfTitular',	
+											'label':'CPF Titular',
+											'visible':'false'
+											}
+											
+										]
+									}" />
+							</div>
+
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group">
+								<input type="button" value="Histório Paciente" id='historicoPaciente'
+									name='historicoPaciente' class="form-control btn-info">
+
+								<input type="button" value="Cadastrar" id="cadastrarPaciente"
+									class="form-control buttoncadastro campocadastro">
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<label for=""> </label>
+							<div class="custom-checkbox custom-checkbox-primary">
+								<input type="checkbox" name="cadastroPaciente" id="cadastroPaciente" value="cadastrar">
+								<label for="cadastroPaciente">Cadastrar Paciente</label>
+							</div>
+							<div class="custom-checkbox custom-checkbox-success">
+								<input type="checkbox" name="buscaPacienteFlg" id="buscaPacienteFlg" value="buscar">
+								<label for="buscaPacienteFlg">Busca Paciente fluig</label>
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div class="form-group">
+								<label class="pacienteObriga" for="email">E-mail</label>
+								<input type="text" name="email" id="email" class="form-control liberarcampo"
+									readonly="readonly">
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group">
+								<label class="pacienteObriga" for="celular">Celular</label>
+								<input type="text" name="celular" id="celular" class="form-control liberarcampo"
+									readonly="readonly">
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group">
+								<label class="pacienteObriga" for="telefone">Telefone</label>
+								<input type="text" name="telefone" id="telefone" class="form-control liberarcampo"
+									readonly="readonly">
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="nomeTitular">Nome Titular</label>
+								<input type="text" name="nomeTitular" id="nomeTitular" class="form-control liberarcampo"
+									readonly="readonly">
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="cpfTitular">CPF Titular</label>
+								<input type="text" name="cpfTitular" id="cpfTitular" class="form-control liberarcampo"
+									readonly="readonly">
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="numPleres">Numero Atendimento Pleres</label>
+								<input type="text" name="numPleres" id="numPleres" class="form-control">
+							</div>
+						</div>
+
+					</div>
+
+					<div class="row" id="concierge" style="display: none">
+
+						<div class=" col-md-2 ">
+							<div class="form-group campozoomMedico">
+								<label class="required" for="">CRM</label>
+								<input type="zoom" id="crm" name="crm" data-zoom="{
+									'displayKey':'CRM',
+									'datasetId':'ds_medicos',
+									'maximumSelectionLength':'1',
+									'placeholder':'Digite um CRM',
+									'filterValues':'CRM',
+									'fields':[
+										{
+										'field':'CRM',
+										'label':'crm'
+										}
+									]
+								}" />
+
+							</div>
+
+							<div class="form-group campocadastroMedico">
+								<label class="required" for="">CRM</label>
+								<input type="text" class="form-control" name="crm1" id="crm1" maxlength="40" />
+							</div>
+
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group campozoomMedico">
+								<label class="required" for="">Nome Médico</label>
+								<input type="zoom" id="nomeMedico" name="nomeMedico" data-zoom="{
+									'displayKey':'NOME',
+									'datasetId':'ds_medicos',
+									'maximumSelectionLength':'1',
+									'placeholder':'Digite um nome de Médico',
+									'filterValues':'NOME',
+									'fields':[
+										{
+										'field':'NOME',
+										'label':'Nome do Médico'
+										}
+									]
+								}" />
+
+							</div>
+
+							<div class="form-group campocadastroMedico">
+								<label class="required" for="">Nome do Medico</label>
+								<input type="text" class="form-control" name="nomeMedico1" id="nomeMedico1"
+									maxlength="40" />
+							</div>
+
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="">E-mail Médico</label>
+								<input type="text" id="emailMedico" name="emailMedico"
+									class="form-control liberarcampoMedico">
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="">Telefone Médico</label>
+								<input type="text" id="telMedico" name="telMedico"
+									class="form-control liberarcampoMedico">
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<input type="button" value="Histório Médico" id='historicoMedico'
+									name='historicoMedico' class="form-control btn-info">
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="custom-checkbox custom-checkbox-primary">
+								<input type="checkbox" name="cadastroMedico" id="cadastroMedico" value="cadastrar">
+								<label for="cadastroMedico">Cadastrar Medico</label>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group">
+								<input type="button" value="Cadastrar" id="cadastrarMedico"
+									class="form-control buttoncadastro campocadastroMedico">
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<label for=""> </label>
+							<div class="custom-checkbox custom-checkbox-primary">
+								<input type="checkbox" name="mostrarPaciente" id="mostrarPaciente" value="mostrar">
+								<label for="mostrarPaciente">Mostrar Pacientes</label>
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div class="form-group campozoomAtrelar">
+								<label class="required" for="cpf">CPF</label>
+								<input type="zoom" id="cpfPacienteConcierge" name="cpfPacienteConcierge" data-zoom="{
+										'displayKey':'CPF',
+										'datasetId':'ds_FaleConoscoPleres',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha o Paciente',
+										'fields':[
+											{
+											'field':'CPF',
+											'label':'cpf'
+											},
+											{
+											'field':'NOME',
+											'label':'Nome'
+											}
+										]
+									}" />
+
+							</div>
+
+						</div>
+
+						<div class="col-md-4">
+							<div class="form-group campozoomAtrelar">
+								<label class="required" for="">Nome do Paciente</label>
+								<input type="zoom" id="NomePacienteConcierge" name="NomePacienteConcierge" data-zoom="{
+										'displayKey':'NOME',
+										'datasetId':'ds_FaleConoscoPleres',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha o Paciente',
+										'fields':[
+											{
+											'field':'NOME',
+											'label':'Nome',
+											'standard':'true'
+											},
+											{
+											'field':'CPF',
+											'label':'CPF'
+											}
+										]
+									}" />
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div class="form-group campozoomAtrelar">
+								<label class="" for="email">E-mail</label>
+								<input type="text" name="emailConcierge" id="emailConcierge" class="form-control"
+									readonly="readonly">
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group campozoomAtrelar">
+								<label class="" for="celular">Celular</label>
+								<input type="text" name="celularConcierge" id="celularConcierge" class="form-control"
+									readonly="readonly">
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group campozoomAtrelar">
+								<label class="" for="telefone">Telefone</label>
+								<input type="text" name="telefoneConcierge" id="telefoneConcierge" class="form-control"
+									readonly="readonly">
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div class="form-group campozoomAtrelar">
+								<label for="">Nome Titular</label>
+								<input type="text" name="nomeTitularConcierge" id="nomeTitularConcierge"
+									class="form-control" readonly="readonly">
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group campozoomAtrelar">
+								<label for="">CPF Titular</label>
+								<input type="text" name="cpfTitularConcierge" id="cpfTitularConcierge"
+									class="form-control" readonly="readonly">
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group campozoomAtrelar">
+								<label for="numPleres">Numero Atendimento Pleres</label>
+								<input type="text" name="numPleresConcierge" id="numPleresConcierge"
+									class="form-control" readonly>
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group campozoomAtrelar">
+								<input type="button" value="Histório Paciente" id='historicoConcierge'
+									name='historicoConcierge' class="form-control btn-info">
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h2 class="panel-title">
+							<span class="fluigicon fluigicon-file-user fluigicon-lg"></span>&nbsp;Ocorrência
+						</h2>
+					</div>
+					<div class="panel-body container-fluid">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label class="required" for="">Manifestação</label>
+									<textarea name="manifestacao" id="manifestacao" class="form-control"
+										rows="10"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label class="required" for="tipoOcorrencia">Área- Comunicação</label>
+
+									<input type="zoom" id="tipoOcorrencia" name="tipoOcorrencia" data-zoom="{
+										'displayKey':'UX_DESTOC',
+										'datasetId':'ds_TipoOcorrencia',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha a Area',
+										'fields':[
+											{
+											'field':'UX_CODTPO',
+											'label':'Codigo Ocorrência'
+											},
+											{
+											'field':'UX_DESTOC',
+											'label':'Descrição Ocorrência'
+											}
+
+										]
+									}" />
+									<input type="hidden" name="codTipoOcorrencia" id="codTipoOcorrencia">
+
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label class="required" for="assunto">Assunto</label>
+
+									<!-- <input type="text" class="form-control quickSearch" name="assunto" id="assunto" maxlength="40" />
+								<span class="input-group-addon" id="btn_assunto">
+									<span class="fluigicon fluigicon-search" data-zoom='["BuscaAssunto",["X5_CHAVE","Codigo","X5_DESCRI","Descrição"],"X5_CHAVE,X5_DESCRI",[],"buscaAssunto"]'></span>
+								</span> -->
+									<input type="zoom" id="assunto" name="assunto" data-zoom="{
+										'displayKey':'X5_DESCRI',
+										'datasetId':'BuscaAssunto',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha a Assunto',
+										'fields':[
+											{
+											'field':'X5_CHAVE',
+											'label':'Codigo Assunto'
+											},
+											{
+											'field':'X5_DESCRI',
+											'label':'Descrição Assunto'
+											}
+										]
+									}" />
+									<input type="hidden" name="codAssunto" id="codAssunto">
+
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label class="required" for="ocorrencia">Ocorrência</label>
+
+									<!-- <input type="text" class="form-control quickSearch" name="ocorrencia" id="ocorrencia" maxlength="40" />
+								<span class="input-group-addon" id="btn_ocorrencia">
+									<span class="fluigicon fluigicon-search " data-zoom='["ds_grupo",["R8_CODGRUPOEMP","Grupo Empresa","R8_DESCGRUPOEMP","Descrição Grupo Empresa"],"R8_CODGRUPOEMP,R8_DESCGRUPOEMP",["mail",""],"R8_CODGRUPOEMP"]'></span>
+								</span> -->
+									<input type="zoom" id="ocorrencia" name="ocorrencia" data-zoom="{
+										'displayKey':'U9_DESC',
+										'datasetId':'ds_DinamicoConsultaProtheus',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha a Ocorrencia',
+										'fields':[
+											{
+											'field':'U9_CODIGO',
+											'label':'Codigo Ocorrencia'
+											},
+											{
+											'field':'U9_DESC',
+											'label':'Descrição'
+											}
+										]
+									}" />
+									<input type="hidden" name="codocorrencia" id="codocorrencia">
+
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group">
+									<label class="required" for="comunicacao">Origem</label>
+
+									<input type="zoom" id="comunicacao" name="comunicacao" data-zoom="{
+										'displayKey':'comunicacao',
+										'datasetId':'ds_Comunicacao_FaleConosco',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha a Comunicação',
+										'fields':[
+											{
+											'field':'codigo',
+											'label':'Codigo'
+											},
+											{
+											'field':'comunicacao',
+											'label':'Comunicação',
+											'standard':'true'
+											}
+										]
+									}" />
+
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="orientacao">Orientação</label>
+									<div class="">
+										<textarea name="orientacao" id="orientacao" class="form-control"
+											rows="5"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12" id="rspPadrao" style="display:none">
+								<div class="form-group">
+									<label for="respostaPadrao">Resposta Padrão</label>
+
+									<!-- <input type="text" class="form-control quickSearch" name="respostaPadrao" id="respostaPadrao" maxlength="40" />
+								<span class="input-group-addon" id="btn_respostaPadrao">
+									<span class="fluigicon fluigicon-search " data-zoom='["ds_grupo",["R8_CODGRUPOEMP","Grupo Empresa","R8_DESCGRUPOEMP","Descrição Grupo Empresa"],"R8_CODGRUPOEMP,R8_DESCGRUPOEMP",["mail",""],"R8_CODGRUPOEMP"]'></span>
+								</span> -->
+									<input type="zoom" id="respostaPadrao" name="respostaPadrao" data-zoom="{
+										'displayKey':'descricao',
+										'datasetId':'ds_RespostaPadrao',
+										'maximumSelectionLength':'1',
+										'placeholder':'Escolha a Resposta',
+										'fields':[
+											{
+											'field':'codigoResp',
+											'label':'Codigo'
+											},
+											{
+											'field':'descricao',
+											'label':'Descrição'
+											}
+											
+										]
+									}" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h2 class="panel-title">
+							<span class="fluigicon fluigicon-file-user fluigicon-lg"></span>&nbsp;Atendimento
+						</h2>
+					</div>
+					<div class="panel-body container-fluid">
+						<div class="row">
+							<div class="table-responsive">
+								<div class="btn_add" style="display:none">
+									<button type="button"
+										class="btn btn-success actionAtvInicial btnAdicionaComentario">adicionar</button>
+								</div>
+								<div style='overflow-x:auto'>
+									<table class="table table-striped" tablename="tbDocumentos" id="tbDocumentos"
+										noaddbutton="true" nodeletebutton="true">
+										<thead>
+											<tr>
+												<th class="colActions"></th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td class="container-fluid">
+													<div class="row">
+														<div class="col-md-4">
+															<div class="form-group">
+																<label class="atendimentoObrigat"
+																	for="ACAO">Ação</label>
+																<div>
+																	<input type="zoom" class="acao" id="ACAO"
+																		name="ACAO" data-zoom="{
+																'displayKey':'UQ_DESC',
+																'datasetId':'ds_DinamicoConsultaProtheus',
+																'maximumSelectionLength':'1',
+																'placeholder':'Escolha a Ação',
+																'filterValues':'Tabela,SUQ,Where,UQ_VALIDO =1',
+																'fields':[
+																	{
+																	'field':'UQ_SOLUCAO',
+																	'label':'Codigo Ação'
+																	},
+																	{
+																	'field':'UQ_DESC',
+																	'label':'Descrição Ação'
+																	}
+																]
+															}" />
+
+																</div>
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="atendimentoObrigat pontofocal"
+																	for="contatoPaciente">Contato com
+																	Paciente</label>
+																<select class="form-control" name="contatoPaciente"
+																	id="contatoPaciente">
+																	<option value="">Selecione...</option>
+																	<option value="sim">Sim</option>
+																	<option value="nao">Não</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<label for="fcr">FCR</label>
+																<input type="text" name="fcr" id="fcr"
+																	class="form-control" readonly="readonly">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="dataehora">Data e Hora</label>
+																<input type="datetime-local" class="form-control"
+																	name="dataehora" id="dataehora" readonly="readonly">
+															</div>
+														</div>
+
+													</div>
+
+													<div class="row">
+														<div class="col-md-12">
+															<div class="form-group">
+																<label class="atendimentoObrigat pontofocal"
+																	for="observacoes">Tratativa da
+																	Ocorrência</label>
+																<textarea class="form-control" name="observacoes"
+																	id="observacoes" rows="10"
+																	onblur="gravarTratativa(this)"></textarea>
+															</div>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<div class="form-group">
+																<label class="atendimentoObrigat" for="CAUSARAIZ">Causa
+																	Raiz</label>
+																<input type="zoom" id="CAUSARAIZ" name="CAUSARAIZ"
+																	data-zoom="{
+																'displayKey':'raiz',
+																'datasetId':'CausaRaiz',
+																'maximumSelectionLength':'1',
+																'placeholder':'Escolha Causa Raiz',
+																'fields':[
+																	{
+																	'field':'codigo',
+																	'label':'Codigo',
+																	'standard':'true'
+																	},
+																	{
+																	'field':'raiz',
+																	'label':'Descrição'
+																	}
+																]
+															}" />
+															</div>
+														</div>
+													</div>
+
+													<div class="col-md-5">
+														<div class="form-group grupopontofocal">
+															<label for="grupPontoFocal">Grupo Ponto
+																Focal</label>
+															<!-- <input type="text" name="grupPontoFocal" id="grupPontoFocal" class="form-control"> -->
+															<input class="required" type="zoom" id="grupPontoFocal"
+																name="grupPontoFocal" data-zoom="{
+																'displayKey':'groupId',
+																'datasetId':'GrupoPontoFocal',
+																'maximumSelectionLength':'1',
+																'placeholder':'Escolha Grupo',
+																'fields':[
+																	{
+																	'field':'groupId',
+																	'label':'Codigo'
+																	},
+																	{
+																	'field':'groupDescription',
+																	'label':'Descrição'
+																	}
+																]
+															}" />
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group grupopontofocal">
+															<label for="DescrigrupPontoFocal">Descrição
+																Grupo Ponto
+																Focal</label>
+															<input type="text" class="form-control"
+																name="DescrigrupPontoFocal" id="DescrigrupPontoFocal"
+																readonly="readonly">
+														</div>
+													</div>
+								</div>
+
+								</td>
+								</tr>
+
+								</tbody>
+								</table>
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<input type="hidden" name="codAcao" id="codAcao">
+				<input type="hidden" name="ultAcao" id="ultAcao">
+				<input type="hidden" name="ultgrupopontofocal" id="ultgrupopontofocal">
+				<input type="hidden" name="fcrOculto" id="fcrOculto">
+				<input type="hidden" name="tpOcorrencia" id="tpOcorrencia" />
+				<input type="hidden" name="linha" id="linha" />
+				<input type="hidden" name="centralTarefa" id="centralTarefa" />
+				<input type="hidden" name="NomePaciente_Hist" id="NomePaciente_Hist" />
+				<input type="hidden" name="CPF_Hist" id="CPF_Hist" />
+				<input type="hidden" name="ult_tratativa" id="ult_tratativa" />
+				<input type="hidden" name="ult_CAUSARAIZ" id="ult_CAUSARAIZ" />
+				<input type="hidden" name="tipoAtend" id="tipoAtend" />
+
+
+		</form>
+	</div>
+</body>
+
+</html>
